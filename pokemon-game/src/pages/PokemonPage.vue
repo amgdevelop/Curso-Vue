@@ -1,6 +1,6 @@
 <template lang="">
   <h1 v-if="!pokemon">Espere por favor...</h1>
-  <div v-else>
+  <div v-else :class="{green: correctAnswer === 1, red: correctAnswer === 2}">
 
     <h1>
         ¿Quién es este pokémon?
@@ -9,7 +9,7 @@
     <!--img-->
     <PokemonPicture :pokemonId="pokemon.id" :showPokemon="showPokemon"/>
     <!--opciones-->
-    <PokemonOptions :pokemons="pokemonArr" @selection="checkAnswer"/>
+    <PokemonOptions :pokemons="pokemonArr" @selection="checkAnswer" />
 
 
     <template v-if="showAnswer">
@@ -42,6 +42,7 @@ export default {
       showPokemon: false,
       showAnswer: false,
       message: "",
+      correctAnswer: null,
     };
   },
   methods: {
@@ -58,9 +59,17 @@ export default {
       this.showPokemon = true;
       this.showAnswer = true;
 
-      this.pokemon.id === selectedId
+      /* this.pokemon.id === selectedId
         ? (this.message = `Correcto, el pokemon es ${this.pokemon.name.toUpperCase()}`)
-        : (this.message = `Lo siento, el pokemon es ${this.pokemon.name.toUpperCase()}`);
+        : (this.message = `Lo siento, el pokemon es ${this.pokemon.name.toUpperCase()}`); */
+
+      if (this.pokemon.id === selectedId) {
+        this.message = `Correcto, el pokemon es ${this.pokemon.name.toUpperCase()}`;
+        this.correctAnswer = 1;
+      } else {
+        this.message = `Lo siento, el pokemon es ${this.pokemon.name.toUpperCase()}`;
+        this.correctAnswer = 2;
+      }
     },
     newGame() {
       this.showPokemon = false;
@@ -77,5 +86,11 @@ export default {
 </script>
 
 
-<style lang="">
+<style scoped>
+.red {
+  background-color: red;
+}
+.green {
+  background-color: green;
+}
 </style>
